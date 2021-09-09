@@ -1,12 +1,17 @@
 package com.romankukin.projects.whoisondutybot.bot;
 
 import com.romankukin.projects.whoisondutybot.properties.AppProperties;
-import lombok.RequiredArgsConstructor;
+import com.romankukin.projects.whoisondutybot.service.TeamService;
+import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updates.Close;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
@@ -15,30 +20,77 @@ import org.telegram.telegrambots.starter.SpringWebhookBot;
 public class WhoIsOnDutyBot extends SpringWebhookBot {
 
   private final AppProperties properties;
+  private final TeamService service;
+  private final static String NO_SUCH_COMMAND = "I don't know such command";
+  private final static String BOT_COMMAND = "bot_command";
 
-  public WhoIsOnDutyBot(AppProperties properties) {
-    super(SetWebhook.builder().url(properties.webhookUrl).build());
+  public WhoIsOnDutyBot(AppProperties properties,
+      TeamService service) {
+    super(SetWebhook.builder().url(properties.getWebhookUrl()).build());
     this.properties = properties;
+    this.service = service;
   }
 
   @Override
   public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-    System.out.println(update.getMessage().getText());
-    return new SendMessage(String.valueOf(update.getMessage().getChatId()), "lolkekcheburek");
+    log.info("update: {}", update);
+    if (update.hasMessage()) {
+      return handleMessage(update.getMessage());
+    }
+    return new Close();
+//    return new SendMessage(String.valueOf(update.getMessage().getChatId()), "lolkekcheburek");
+  }
+
+  private BotApiMethod<?> handleMessage(Message message) {
+    log.info("message: {}", message);
+
+    Optional<List<MessageEntity>> entities = Optional.ofNullable(message.getEntities());
+    if (entities.isPresent()) {
+      Optional<MessageEntity> commandEntity = entities.get().stream()
+          .filter(e -> BOT_COMMAND.equals(e.getType())).findFirst();
+      if (commandEntity.isPresent()) {
+        String command = message.getText()
+            .substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
+        return SendMessage.builder().text(handleCommand(command))
+            .chatId(message.getChatId().toString()).build();
+      }
+    }
+    return generateDefaultMessage(message);
+  }
+
+  private static SendMessage generateDefaultMessage(Message message) {
+    return SendMessage.builder().text(NO_SUCH_COMMAND)
+        .chatId(message.getChatId().toString()).build();
+  }
+
+  private String handleCommand(String command) {
+    switch (command) {
+      case "/list":
+      case "/team":
+        return service.team();
+      case "/add":
+        return service.add();
+      case "/remove":
+        return service.remove();
+      case "/choose":
+        return service.choose();
+      default:
+        return NO_SUCH_COMMAND;
+    }
   }
 
   @Override
   public String getBotPath() {
-    return properties.username;
+    return properties.getUsername();
   }
 
   @Override
   public String getBotUsername() {
-    return properties.username;
+    return properties.getUsername();
   }
 
   @Override
   public String getBotToken() {
-    return properties.token;
+    return properties.getToken();
   }
 }
