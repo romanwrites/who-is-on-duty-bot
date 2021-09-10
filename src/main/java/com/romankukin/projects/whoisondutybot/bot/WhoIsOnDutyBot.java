@@ -49,9 +49,8 @@ public class WhoIsOnDutyBot extends SpringWebhookBot {
       Optional<MessageEntity> commandEntity = entities.get().stream()
           .filter(e -> BOT_COMMAND.equals(e.getType())).findFirst();
       if (commandEntity.isPresent()) {
-        String command = message.getText()
-            .substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
-        return SendMessage.builder().text(handleCommand(command))
+        String[] command = message.getText().substring(commandEntity.get().getOffset()).split(" ");
+        return SendMessage.builder().text(handleCommand(command[0], command.length == 1 ? "" : command[1]))
             .chatId(message.getChatId().toString()).build();
       }
     }
@@ -63,15 +62,15 @@ public class WhoIsOnDutyBot extends SpringWebhookBot {
         .chatId(message.getChatId().toString()).build();
   }
 
-  private String handleCommand(String command) {
+  private String handleCommand(String command, String params) {
     switch (command) {
       case "/list":
       case "/team":
         return service.team();
       case "/add":
-        return service.add();
+        return service.add(params);
       case "/remove":
-        return service.remove();
+//        return service.remove();
       case "/choose":
         return service.choose();
       default:
