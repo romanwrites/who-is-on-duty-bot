@@ -3,15 +3,15 @@ package com.romankukin.projects.whoisondutybot.properties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 @ConfigurationProperties(prefix = "who-is-on-duty-telegram-bot")
-@Component
+@Configuration
 @Getter
 @Setter
 public class AppProperties {
 
-  public String username;
-  public String token;
-  public String webhookUrl;
+  private String username;
+  private String token;
+  private String webhookUrl;
 }
