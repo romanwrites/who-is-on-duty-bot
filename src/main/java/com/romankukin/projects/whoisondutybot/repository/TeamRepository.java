@@ -9,11 +9,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 @Getter
 @Setter
 @Repository
+@Slf4j
 public class TeamRepository {
 
   private final static long NO_ID = 0L;
@@ -45,12 +47,18 @@ public class TeamRepository {
   }
 
   public int remove(List<TeamMember> people) {
+    int removedCount = 0;
     for (TeamMember person : people) {
-      long number = teammateToLong.get(person);
-      longToTeammate.remove(number);
-      teammateToLong.remove(person);
+      if (teammateToLong.containsKey(person)) {
+        long number = teammateToLong.get(person);
+        longToTeammate.remove(number);
+        teammateToLong.remove(person);
+        ++removedCount;
+      } else {
+        log.warn("Tried to remove person {}. But no such person found", person);
+      }
     }
-    return people.size();
+    return removedCount;
   }
 
   public Optional<TeamMember> getTeammateByNumber(Long number) {
