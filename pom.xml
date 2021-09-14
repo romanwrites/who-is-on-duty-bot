@@ -24,11 +24,6 @@
 
   <dependencies>
     <!--	Telegram bots API wrapper -->
-<!--    <dependency>-->
-<!--      <groupId>org.telegram</groupId>-->
-<!--      <artifactId>telegrambots</artifactId>-->
-<!--      <version>${telegrambots.version}</version>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>org.telegram</groupId>
       <artifactId>telegrambots-spring-boot-starter</artifactId>
