@@ -22,8 +22,7 @@ public class PreventIdlingErrorTask {
       URL url = new URL(pingTaskProperties.getUrl());
       HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
       httpURLConnection.connect();
-      log.info("Ping {}", url.getHost());
-      log.info("Response: {}", httpURLConnection.getResponseCode());
+      log.info("Ping {}, response status {}", url.getPath(), httpURLConnection.getResponseCode());
       httpURLConnection.disconnect();
     } catch (IOException e) {
       log.error("Ping Failed");

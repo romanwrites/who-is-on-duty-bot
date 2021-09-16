@@ -21,7 +21,7 @@ jobs:
       WHO_IS_ON_DUTY_TELEGRAM_BOT_USERNAME: ${{ secrets.WHO_IS_ON_DUTY_TELEGRAM_BOT_USERNAME }}
       WHO_IS_ON_DUTY_TELEGRAM_BOT_WEBHOOK_URL: ${{ secrets.WHO_IS_ON_DUTY_TELEGRAM_BOT_WEBHOOK_URL }}
       PING_TASK_PERIOD: ${{ secrets.PING_TASK_PERIOD }}
-      PING_TASK_URL: ${{ secrets.PING_TASK_URL }}
+      PING_TASK_URL: ${{ secrets.WHO_IS_ON_DUTY_TELEGRAM_BOT_WEBHOOK_URL }}/health
 
     steps:
     - uses: actions/checkout@v2
