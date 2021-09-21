@@ -67,6 +67,8 @@ public class WhoIsOnDutyBot extends SpringWebhookBot {
 
   private String handleCommand(String command, String params) {
     switch (command) {
+      case "/help":
+        return service.help();
       case "/list":
       case "/team":
         return service.team();
