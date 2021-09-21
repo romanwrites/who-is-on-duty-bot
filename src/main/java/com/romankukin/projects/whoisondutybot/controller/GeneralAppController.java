@@ -18,7 +18,7 @@ public class GeneralAppController {
 
   private final WhoIsOnDutyBot bot;
 
-  @RequestMapping(value = "/", method = RequestMethod.POST)
+  @RequestMapping(value = "/telegram", method = RequestMethod.POST)
   public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
     log.info("/ root path triggered");
     return bot.onWebhookUpdateReceived(update);

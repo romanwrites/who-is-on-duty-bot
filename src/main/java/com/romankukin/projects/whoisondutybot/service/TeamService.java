@@ -58,4 +58,10 @@ public class TeamService {
         .map(teamMember -> teamMember.getName() + " is on duty today! 🥳")
         .orElse("something went wrong 🤔");
   }
+
+  public String help() {
+    return "`/add Hulk;Thor;SpiderMan;IronMan;Captain` to add people to list\n"
+        + "`/team` to show team list\n"
+        + "`/choose` to randomly select one person from a list\n";
+  }
 }
