@@ -20,7 +20,8 @@ public class TeamService {
   private final TeamRepository repository;
 
   public String team() {
-    return String.join("\n", repository.listAllNames());
+    List<String> names = repository.listAllNames();
+    return names.isEmpty() ? "The team is empty" : String.join("\n", names);
   }
 
   public String add(String teammates) {
@@ -33,12 +34,13 @@ public class TeamService {
   }
 
   public String remove(String teammates) {
-    if (!StringUtils.hasText(teammates)) {
-      return "Teammates list is empty";
-    }
-
-    int result = repository.remove(getTeammatesList(teammates));
-    return "Removed " + result + " teammates";
+    return "Remove command doesn't work now. Use /clear";
+//    if (!StringUtils.hasText(teammates)) {
+//      return "Teammates list is empty";
+//    }
+//
+//    int result = repository.remove(getTeammatesList(teammates));
+//    return "Removed " + result + " teammates";
   }
 
   private static List<TeamMember> getTeammatesList(String teammates) {
@@ -52,8 +54,9 @@ public class TeamService {
       return "Team is empty, no one was randomly selected";
     }
 
-    Optional<TeamMember> teammateByNumber = repository.getTeammateByNumber(
-        ThreadLocalRandom.current().nextLong(repository.getFirstId(), repository.getLastId()));
+    long teammateId = ThreadLocalRandom.current().nextLong(repository.getFirstId(), repository.getLastId() + 1);
+    log.info("/ choose random teammate id: {}", teammateId);
+    Optional<TeamMember> teammateByNumber = repository.getTeammateByNumber(teammateId);
     return teammateByNumber
         .map(teamMember -> teamMember.getName() + " is on duty today! 🥳")
         .orElse("something went wrong 🤔");
@@ -63,5 +66,10 @@ public class TeamService {
     return "`/add Hulk;Thor;SpiderMan;IronMan;Captain` to add people to list\n"
         + "`/team` to show team list\n"
         + "`/choose` to randomly select one person from a list\n";
+  }
+
+  public String clear() {
+    repository.clear();
+    return "List cleared";
   }
 }

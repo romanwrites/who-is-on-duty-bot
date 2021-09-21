@@ -33,7 +33,7 @@ public class TeamRepository {
     id = new AtomicLong(NO_ID);
   }
 
-  public int add(List<TeamMember> people) {
+  public synchronized int add(List<TeamMember> people) {
     for (TeamMember person : people) {
       long number = id.addAndGet(INCREMENT_ID_VALUE);
       longToTeammate.put(number, person);
@@ -78,5 +78,11 @@ public class TeamRepository {
 
   public long getFirstId() {
     return longToTeammate.isEmpty() ? NO_ID : FIRST_ID;
+  }
+
+  public synchronized void clear() {
+    longToTeammate.clear();
+    teammateToLong.clear();
+    id.set(NO_ID);
   }
 }

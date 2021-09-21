@@ -2,6 +2,8 @@ package com.romankukin.projects.whoisondutybot.bot;
 
 import com.romankukin.projects.whoisondutybot.properties.AppProperties;
 import com.romankukin.projects.whoisondutybot.service.TeamService;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class WhoIsOnDutyBot extends SpringWebhookBot {
   private final TeamService service;
   private final static String NO_SUCH_COMMAND = "I don't know such command";
   private final static String BOT_COMMAND = "bot_command";
+  private final static String MARKDOWN = "Markdown";
 
   public WhoIsOnDutyBot(AppProperties properties,
       TeamService service) {
@@ -38,7 +41,6 @@ public class WhoIsOnDutyBot extends SpringWebhookBot {
       return handleMessage(update.getMessage());
     }
     return new Close();
-//    return new SendMessage(String.valueOf(update.getMessage().getChatId()), "lolkekcheburek");
   }
 
   private BotApiMethod<?> handleMessage(Message message) {
@@ -53,7 +55,10 @@ public class WhoIsOnDutyBot extends SpringWebhookBot {
         if (command.length >= 1 && command[0].contains("@")) {
           command[0] = command[0].substring(0, command[0].indexOf("@"));
         }
-        return SendMessage.builder().text(handleCommand(command[0], command.length == 1 ? "" : command[1]))
+        String responseMessage = handleCommand(command[0], command.length == 1 ? "" : command[1]);
+        return SendMessage.builder()
+            .text(responseMessage)
+            .parseMode(MARKDOWN)
             .chatId(message.getChatId().toString()).build();
       }
     }
