@@ -83,6 +83,8 @@ public class WhoIsOnDutyBot extends SpringWebhookBot {
         return service.remove(params);
       case "/choose":
         return service.choose();
+      case "/clear":
+        return service.clear();
       default:
         return NO_SUCH_COMMAND;
     }
