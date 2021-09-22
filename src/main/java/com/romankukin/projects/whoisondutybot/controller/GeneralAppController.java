@@ -20,7 +20,7 @@ public class GeneralAppController {
 
   @RequestMapping(value = "/telegram", method = RequestMethod.POST)
   public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
-    log.info("/ root path triggered");
+    log.info("/ telegram bot triggered");
     return bot.onWebhookUpdateReceived(update);
   }
 
