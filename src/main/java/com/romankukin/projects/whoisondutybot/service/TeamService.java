@@ -65,7 +65,8 @@ public class TeamService {
   public String help() {
     return "`/add Hulk;Thor;SpiderMan;IronMan;Captain` to add people to list\n"
         + "`/team` to show team list\n"
-        + "`/choose` to randomly select one person from a list\n";
+        + "`/choose` to randomly select one person from a list\n"
+        + "`/clear` to clear list";
   }
 
   public String clear() {
