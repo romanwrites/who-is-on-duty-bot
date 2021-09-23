@@ -73,9 +73,4 @@ public class TeamService {
     repository.clear();
     return "List cleared";
   }
-
-  public String clear() {
-    repository.clear();
-    return "List cleared";
-  }
 }
