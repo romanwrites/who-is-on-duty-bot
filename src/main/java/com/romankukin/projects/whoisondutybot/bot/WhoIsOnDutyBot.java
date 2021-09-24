@@ -2,8 +2,6 @@ package com.romankukin.projects.whoisondutybot.bot;
 
 import com.romankukin.projects.whoisondutybot.properties.AppProperties;
 import com.romankukin.projects.whoisondutybot.service.TeamService;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
