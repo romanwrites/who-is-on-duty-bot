@@ -35,12 +35,6 @@ public class TeamService {
 
   public String remove(String teammates) {
     return "Remove command doesn't work now. Use /clear";
-//    if (!StringUtils.hasText(teammates)) {
-//      return "Teammates list is empty";
-//    }
-//
-//    int result = repository.remove(getTeammatesList(teammates));
-//    return "Removed " + result + " teammates";
   }
 
   private static List<TeamMember> getTeammatesList(String teammates) {
